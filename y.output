@@ -1,0 +1,114 @@
+
+state 0
+	$accept: .start $end 
+
+	COUNTRY  shift 4
+	'+'  shift 3
+	.  error
+
+	phone  goto 2
+	start  goto 1
+
+state 1
+	$accept:  start.$end 
+	start:  start.',' phone 
+
+	$end  accept
+	','  shift 5
+	.  error
+
+
+state 2
+	start:  phone.    (1)
+
+	.  reduce 1 (src line 18)
+
+
+state 3
+	phone:  '+'.COUNTRY '(' OPERATOR ')' PHONE 
+
+	COUNTRY  shift 6
+	.  error
+
+
+state 4
+	phone:  COUNTRY.OPERATOR PHONE 
+
+	OPERATOR  shift 7
+	.  error
+
+
+state 5
+	start:  start ','.phone 
+
+	COUNTRY  shift 4
+	'+'  shift 3
+	.  error
+
+	phone  goto 8
+
+state 6
+	phone:  '+' COUNTRY.'(' OPERATOR ')' PHONE 
+
+	'('  shift 9
+	.  error
+
+
+state 7
+	phone:  COUNTRY OPERATOR.PHONE 
+
+	PHONE  shift 10
+	.  error
+
+
+state 8
+	start:  start ',' phone.    (2)
+
+	.  reduce 2 (src line 22)
+
+
+state 9
+	phone:  '+' COUNTRY '('.OPERATOR ')' PHONE 
+
+	OPERATOR  shift 11
+	.  error
+
+
+state 10
+	phone:  COUNTRY OPERATOR PHONE.    (4)
+
+	.  reduce 4 (src line 30)
+
+
+state 11
+	phone:  '+' COUNTRY '(' OPERATOR.')' PHONE 
+
+	')'  shift 12
+	.  error
+
+
+state 12
+	phone:  '+' COUNTRY '(' OPERATOR ')'.PHONE 
+
+	PHONE  shift 13
+	.  error
+
+
+state 13
+	phone:  '+' COUNTRY '(' OPERATOR ')' PHONE.    (3)
+
+	.  reduce 3 (src line 26)
+
+
+10 terminals, 3 nonterminals
+5 grammar rules, 14/8000 states
+0 shift/reduce, 0 reduce/reduce conflicts reported
+52 working sets used
+memory: parser 2/120000
+0 extra closures
+12 shift entries, 1 exceptions
+3 goto entries
+0 entries saved by goto default
+Optimizer space used: output 13/120000
+13 table entries, 0 zero
+maximum spread: 10, maximum offset: 10
